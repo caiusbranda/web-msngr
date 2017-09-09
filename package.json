@@ -9,7 +9,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/caiusbranda/web-msngr.git"
@@ -20,7 +19,6 @@
     "url": "https://github.com/caiusbranda/web-msngr/issues"
   },
   "homepage": "https://github.com/caiusbranda/web-msngr#readme",
-
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.2.4",
@@ -32,7 +30,9 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "body-parser": "^1.18.0",
     "core-js": "^2.4.1",
+    "express": "^4.15.4",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },
