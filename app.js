@@ -1,12 +1,26 @@
+require('dotenv').config();
 // initialize modules
 const express = require('express');
-const app = express();
 const http = require('http');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const path = require('path');
-
+const mongoose = require('mongoose');
 // initialize routes
-const index = require('./server/routes/index');
+const indexRoute = require('./server/routes/index');
+const usersRoute = require('./server/routes/users');
+
+const app = express();
+
+var options = {
+    useMongoClient: true,
+    user: process.env.username,
+    pass: process.env.password
+  };
+
+mongoose.connect('mongodb://ds129144.mlab.com:29144/web-msngr', options);
+
+/* mongoose.connect('mongodb://' + username + 
+    ':' + password + '@ds129144.mlab.com:29144/web-msngr'); */
 
 // set up body data parsing middleware
 app.use(bodyParser.json());
@@ -16,7 +30,8 @@ app.use(bodyParser.urlencoded( { extended: false }))
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // setting up routes
-app.use('/test', index)
+app.use('/test', indexRoute);
+app.use('/users', usersRoute);
 
 // redirect other requests to the index
 app.get('*', function (req, res) {
