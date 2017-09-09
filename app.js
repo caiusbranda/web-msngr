@@ -4,7 +4,9 @@ const app = express();
 const http = require('http');
 const bodyParser = require('body-parser')
 const path = require('path');
-const routes = require('./server/routes');
+
+// initialize routes
+const index = require('./server/routes/index');
 
 // set up body data parsing middleware
 app.use(bodyParser.json());
@@ -14,7 +16,7 @@ app.use(bodyParser.urlencoded( { extended: false }))
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // setting up routes
-app.use('/', routes)
+app.use('/test', index)
 
 // redirect other requests to the index
 app.get('*', function (req, res) {
