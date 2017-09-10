@@ -5,6 +5,7 @@ var Message = require('../models/message');
 var User = require('../models/user');
 var Chats = require('../models/chat');
 
+// middleware to verify token
 router.use('/', function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {
@@ -26,8 +27,8 @@ router.use('/', function(req, res, next) {
     });
 });
 
-// return the last X amount of messages in a chat
-router.get('/:id/content', function (req, res, next) {
+// return messages in a chat with a specific id
+router.get('/:id/message', function (req, res, next) {
     Chats.findById(req.params.id, function(err, chat) {
         if (err) {
             return res.status(500).json({
@@ -39,7 +40,7 @@ router.get('/:id/content', function (req, res, next) {
         // used to prevent async jump ahead
         var completed = 0;
         
-        // loop through each message and find their content
+        // loop through each message and find their content (is there a better way to do this?)
         chat.messages.forEach(function(message) {
             Message.findById(message, function(err, content) {
                 messages.push(content.contentText)
@@ -49,6 +50,7 @@ router.get('/:id/content', function (req, res, next) {
                 }
             });
         });
+
         function sendMessages() {
             res.status(200).json({
                 message: 'Successfully found chat',
@@ -59,7 +61,7 @@ router.get('/:id/content', function (req, res, next) {
 })
 
 // create a new message within a chat
-router.post('/:id', function (req, res, next) {
+router.post('/:id/message', function (req, res, next) {
     var message = req.body.message;
     Chats.findById(req.params.id, function(err, chat) {
         if (err) {
@@ -96,6 +98,7 @@ router.post('/:id', function (req, res, next) {
         });
     })
 })
+
 // return a chat with a specific ID
 router.get('/:id', function (req, res, next) {
     Chats.findById(req.params.id, function(err, result) {
