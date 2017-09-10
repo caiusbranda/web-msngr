@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 // initialize routes
 const indexRoute = require('./server/routes/index');
 const usersRoute = require('./server/routes/users');
+const chatsRoute = require('./server/routes/chats');
 
 const app = express();
 
@@ -17,7 +18,12 @@ var options = {
     pass: process.env.password
   };
 
-mongoose.connect('mongodb://ds129144.mlab.com:29144/web-msngr', options);
+console.log(options);
+mongoose.connect('mongodb://ds129144.mlab.com:29144/web-msngr', options, function(err){
+    if (err) {
+        console.log(err);
+    }
+});
 
 /* mongoose.connect('mongodb://' + username + 
     ':' + password + '@ds129144.mlab.com:29144/web-msngr'); */
@@ -32,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // setting up routes
 app.use('/test', indexRoute);
 app.use('/users', usersRoute);
+app.use('/chats', chatsRoute);
 
 // redirect other requests to the index
 app.get('*', function (req, res) {
