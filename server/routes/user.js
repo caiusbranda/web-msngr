@@ -52,7 +52,7 @@ router.post('/', function (req, res, next) {
         lastName: req.body.lastName,
         password: bcrypt.hashSync(req.body.password, 10),
         email: req.body.email,
-        chats: null
+        chats: []
     });
     user.save(function (err, result) {
         if (err) {

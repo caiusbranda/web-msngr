@@ -28,96 +28,113 @@ router.use('/', function(req, res, next) {
 });
 
 // return messages in a chat with a specific id
-router.get('/:id/message', function (req, res, next) {
-    Chats.findById(req.params.id, function(err, chat) {
+router.get('/:id/content', function (req, res, next) {
+    
+    User.findById(req.decoded.user._id).
+    populate({
+        path: 'chats',
+        model: 'Chat',
+        populate: {
+            path: 'messages',
+            model: 'Message',
+            populate: {
+                path: 'author',
+                model: 'User'
+            }
+        }
+    }).
+    exec(function(err, user) {
         if (err) {
             return res.status(500).json({
                 title: 'Server error',
                 error: err
             });
         }
-        var messages = [];
-        // used to prevent async jump ahead
-        var completed = 0;
-        
-        // loop through each message and find their content (is there a better way to do this?)
-        chat.messages.forEach(function(message) {
-            Message.findById(message, function(err, content) {
-                messages.push(content.contentText)
-                completed++;
-                if (completed == chat.messages.length) {
-                    sendMessages();
-                }
-            });
-        });
 
-        function sendMessages() {
-            res.status(200).json({
-                message: 'Successfully found chat',
-                messages: messages
-            })
+        for (i in user.chats) {
+            if (user.chats[i]._id == req.params.id) {
+                res.status(200).json({
+                    message: 'Successfully returned chats',
+                    messages: user.chats[i].messages
+                })
+            }
         }
     })
 })
 
 // create a new message within a chat
-router.post('/:id/message', function (req, res, next) {
+router.post('/:id/content', function (req, res, next) {
     var message = req.body.message;
-    Chats.findById(req.params.id, function(err, chat) {
+
+    User.findById(req.decoded.user._id).
+    populate('chats').
+    exec(function(err, user) {
         if (err) {
             return res.status(500).json({
                 title: 'Server error',
                 error: err
             });
         }
-        User.findById(req.decoded.user._id, function(err, user) {
+
+        for (i in user.chats) {
+            if (user.chats[i]._id == req.params.id) {
+                addMessage(user.chats[i]);
+            }
+        }
+    })
+    
+    function addMessage(chat) {
+        var message = new Message({
+            contentText: req.body.message,
+            author: req.decoded.user
+        });
+        message.save(function (err, message) {
             if (err) {
                 return res.status(500).json({
                     title: 'An error occurred',
                     error: err
                 });
             }
-            var message = new Message({
-                contentText: req.body.content,
-                author: user
+            Chats.update({ _id: chat._id }, {$push: { messages: message }}, function(err, raw) {
+                console.log(raw);
             });
-            message.save(function (err, result) {
-                if (err) {
-                    return res.status(500).json({
-                        title: 'An error occurred',
-                        error: err
-                    });
-                }
-                chat.messages.push(result);
-                chat.save();
-                res.status(201).json({
-                    message: 'Success',
-                    obj: result
-                });
-            })
-        });
-    })
+
+            res.status(201).json({
+                message: 'Success',
+                obj: message
+            });
+        })
+    }
 })
 
 // return a chat with a specific ID
 router.get('/:id', function (req, res, next) {
-    Chats.findById(req.params.id, function(err, result) {
+    User.findById(req.decoded.user._id).
+    populate('chats').
+    exec(function(err, user) {
         if (err) {
             return res.status(500).json({
                 title: 'Server error',
                 error: err
             });
         }
-        res.status(200).json({
-            message: 'Successfully found chat',
-            chat: result
-        })
+
+        for (i in user.chats) {
+            if (user.chats[i]._id == req.params.id) {
+                return res.status(200).json({
+                    message: 'Successfully returned chat',
+                    chat: user.chats[i]
+                })
+            }
+        }
     })
 });
 
 // return all chats
 router.get('/', function(req, res, next) {
-    Chats.find({'users': req.decoded.user._id}, function(err, result) {
+    User.findById(req.decoded.user._id).
+    populate('chats').
+    exec(function(err, user) {
         if (err) {
             return res.status(500).json({
                 title: 'Server error',
@@ -126,14 +143,14 @@ router.get('/', function(req, res, next) {
         }
         res.status(200).json({
             message: 'Successfully returned chats',
-            chats: result
+            chats: user.chats
         })
-    });
+    })
 });
 
 // create a new chat
 router.post('/', function(req, res, next){
-    var participants = req.body.participants;
+    var participants = req.body.users;
     var validUsers = [];
 
     // used to prevent async jump ahead
@@ -180,7 +197,13 @@ router.post('/', function(req, res, next){
                 obj: result
             });
             
+            for (var i = 0; i < validUsers.length; i++) {
+                User.update({ _id: validUsers[i]._id }, {$push: { chats: result }}, function(err, raw) {
+                    console.log(raw);
+                });
+            }
         });
+
     }
 });
 
