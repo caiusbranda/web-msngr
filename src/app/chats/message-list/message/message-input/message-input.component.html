@@ -1,0 +1,14 @@
+<form class="form-inline" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <input
+                type="text"
+                placeholder="enter msg"
+                id="message"
+                class="form-control"
+                formControlName="message">
+    </div>
+    <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!myForm.valid">Enter</button>
+</form>
