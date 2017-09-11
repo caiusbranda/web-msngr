@@ -1,0 +1,11 @@
+<div *ngFor="let chat of chats"
+class="card">
+    <p>
+        <span *ngFor="let user of chat.users; let i = index">
+            <span *ngIf="i != 0">, </span>
+            {{ user.firstName }}
+        </span>
+    </p>
+</div>
+
+
