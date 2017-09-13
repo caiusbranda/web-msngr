@@ -5,24 +5,31 @@ import { Chat } from '../../chat.model';
 import { Headers, Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 
-
 @Injectable()
 export class ChatService {
     private chats: Chat[] = [];
-    constructor(private http: Http, private router: Router) {}
+    constructor(private router: Router, private http: Http) {}
 
     getChats() {
-        return this.http.get('http://localhost:3000/chats')
+
+        // if token exists, set it equal to const token, else make const token empty
+        const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+
+
+        return this.http.get('http://localhost:3000/chats' + token)
             .map((response: Response) => {
-                const newChats = response.json().obj;
+                const newChats = response.json().chats;
                 const transformedChats: Chat[] = [];
+
                 for (const chat of newChats) {
-                    transformedChats.push(new Chat(chat.users, chat.messages, chat._id));
+                    const newChat = new Chat(chat.users, chat.messages, chat._id);
+                    transformedChats.push(newChat);
+                    console.log(newChat);
                 }
                 this.chats = transformedChats;
                 return transformedChats;
             })
-            .catch((error: Response) => Observable.throw(error.json()));
+            .catch((error: Response) => Observable.throw(error));
     }
 
     getChat(id: string) {
@@ -39,7 +46,11 @@ export class ChatService {
         const headers = new Headers({
             'Content-Type': 'application/json'
         });
-        return this.http.post('http://localhost:3000/chats', body, {headers: headers})
+        console.log(body);
+         // if token exists, set it equal to const token, else make const token empty
+         const token = localStorage.getItem('token')
+         ? '?token=' + localStorage.getItem('token') : '';
+        return this.http.post('http://localhost:3000/chats' + token, body, {headers: headers})
             .map((response: Response) => {
                 const result = response.json();
                 const newChat = new Chat(result.obj.users, [], result.obj._id);
@@ -51,25 +62,34 @@ export class ChatService {
 
     deleteChat(chat: Chat) {
         this.chats.splice(this.chats.indexOf(chat), 1);
-        return this.http.delete('http://localhost:3000/message/' + chat.chatId)
+         // if token exists, set it equal to const token, else make const token empty
+         const token = localStorage.getItem('token')
+         ? '?token=' + localStorage.getItem('token') : '';
+
+        return this.http.delete('http://localhost:3000/message/' + chat.chatId + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => Observable.throw(error.json()));
     }
 
-    addMessage(chat: Chat, message: Message) {
+    addMessage(chat: Chat, message: string) {
         // push message locally
-        chat.messages.push(message);
-
-        const updateComponents = {
-            targetChat: chat.chatId,
-            newMessage: message
+        const newMessageText = {
+            contentText: message
         };
 
-        const body = JSON.stringify(updateComponents);
+        const body = JSON.stringify(newMessageText);
         const headers = new Headers({
             'Content-Type': 'application/json'
         });
-        return this.http.post('http://localhost:3000/chats', body, {headers: headers})
+
+         // if token exists, set it equal to const token, else make const token empty
+         const token = localStorage.getItem('token')
+         ? '?token=' + localStorage.getItem('token') : '';
+
+        return this.http.post('http://localhost:3000/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
+            .map(
+                (response: Response) => chat.messages.push(response.json().obj)
+            )
             .subscribe();
            /*  .map((response: Response) => {
                 const result = response.json();

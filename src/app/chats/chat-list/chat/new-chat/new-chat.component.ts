@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { User } from '../../../../auth/user.model';
 import { Chat } from '../../../chat.model';
 import { ChatService } from '../chat.service';
@@ -12,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 export class NewChatComponent implements OnInit {
     myForm: FormGroup;
 
-    constructor(private chatService: ChatService) {}
+    constructor(private chatService: ChatService, private router: Router) {}
 
     onSubmit() {
         const userEmails = this.myForm.value.users.split(',');
@@ -29,7 +30,9 @@ export class NewChatComponent implements OnInit {
         );
         this.chatService.addChat(chat)
             .subscribe(
-                data => console.log(data),
+                data => {
+                    this.router.navigateByUrl('/chats/' + data.chatId);
+                },
                 error => console.error(error)
             );
         this.myForm.reset();

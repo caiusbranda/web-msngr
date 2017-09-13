@@ -17,12 +17,8 @@ export class MessageInputComponent implements OnInit {
         constructor(private chatService: ChatService) {}
 
         onSubmit() {
-            const message = new Message(
-                this.myForm.value.message,
-                new User('test@test.com', 'test')
-            );
 
-            this.chatService.addMessage(this.chat, message);
+            this.chatService.addMessage(this.chat, this.myForm.value.message);
             this.myForm.reset();
         }
 

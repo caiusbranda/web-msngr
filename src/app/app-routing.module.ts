@@ -15,7 +15,6 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'chats', component: ChatsComponent, children: [
-      { path: '', redirectTo: './new', pathMatch: 'full' },
       { path: 'new', component: NewChatComponent },
       { path: ':id', component: ChatComponent}
   ] }

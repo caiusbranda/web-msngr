@@ -85,7 +85,7 @@ router.post('/:id/content', function (req, res, next) {
     
     function addMessage(chat) {
         var message = new Message({
-            contentText: req.body.message,
+            contentText: req.body.contentText,
             author: req.decoded.user
         });
         message.save(function (err, message) {
@@ -133,7 +133,10 @@ router.get('/:id', function (req, res, next) {
 // return all chats
 router.get('/', function(req, res, next) {
     User.findById(req.decoded.user._id).
-    populate('chats').
+    populate({
+        path: 'chats',
+        populate: { path: 'users' } //populates the child users of chats
+    }).
     exec(function(err, user) {
         if (err) {
             return res.status(500).json({
@@ -158,7 +161,7 @@ router.post('/', function(req, res, next){
     
     // loop through each participant and find their user object
     participants.forEach(function(participant) {
-        User.findOne({email: participant}, function(err, party) {
+        User.findOne({email: participant.email}, function(err, party) {
             validUsers.push(party)
             completed++;
             if (completed == participants.length) {

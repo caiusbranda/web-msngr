@@ -19,6 +19,7 @@ import { ChatComponent } from './chats/chat-list/chat/chat.component';
 import { ChatsComponent } from './chats/chats.component';
 import { NewChatComponent } from './chats/chat-list/chat/new-chat/new-chat.component';
 import { MessageInputComponent } from './chats/message-list/message/message-input/message-input.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MessageInputComponent } from './chats/message-list/message/message-inpu
     ReactiveFormsModule,
     AppRoutingModule,
     HttpModule,
+    HttpClientModule,
     NgbModule.forRoot()
   ],
   providers: [AuthService, ChatService],
