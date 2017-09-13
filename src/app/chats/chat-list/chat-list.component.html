@@ -2,10 +2,7 @@
 class="card">
     <a class="btn btn-primary"
         routerLink="/chats/{{chat.chatId}}">
-        <span *ngFor="let user of chat.users; let i = index">
-            <span *ngIf="i != 0">, </span>
-            {{ user.firstName }}
-        </span>
+        <span *ngFor="let user of chat.users; let i = index">{{ i != 0 ? ', ' : '' }}{{ user.firstName }}</span>
     </a>
 </div>
 

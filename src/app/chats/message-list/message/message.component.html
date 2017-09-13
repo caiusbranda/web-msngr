@@ -1,5 +1,8 @@
 
-<p class="card-title">
+<p class="card-header"
+    *ngIf="!(previousMessage &amp;&amp; previousMessage.author.email === message.author.email)"
+    >
+    
     {{ message.author.firstName }}
 </p>
 

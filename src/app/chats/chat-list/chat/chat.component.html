@@ -1,10 +1,7 @@
 <h4>
-    <span *ngFor="let user of this.currentChat.users; let i = index">
-        <span *ngIf="i != 0">, </span>
-        {{ user.firstName }}
-    </span>
+    <span *ngFor="let user of this.currentChat.users; let i = index">{{ i != 0 ? ', ' : ''}}{{ user.firstName }}</span>
 </h4>
 
 <app-message-list [messages]="this.currentChat.messages"></app-message-list>
 
-<app-message-input [chat]="currentChat"></app-message-input>
+<app-message-input class="mt-3" [chat]="currentChat"></app-message-input>
