@@ -1,0 +1,26 @@
+
+<div class="row my-3">
+    <div class="col-md-4 mx-auto">
+        <h3>Create a new chat!</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="firstName">Users</label>
+                <input
+                        type="text"
+                        id="users"
+                        class="form-control"
+                        formControlName="users">
+            </div>
+            <button
+                    class="btn btn-primary"
+                    type="submit"
+                    [disabled]="!myForm.valid">Create Chat</button>
+        </form>
+    </div>
+</div>
+

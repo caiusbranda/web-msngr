@@ -1,0 +1,31 @@
+<div class="row my-3">
+    <div class="col-md-4 mx-auto">
+        <h2>Please login!</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        formControlName="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        formControlName="password">
+            </div>
+            <button
+                    class="btn btn-primary"
+                    type="submit"
+                    [disabled]="!myForm.valid">Submit</button>
+        </form>
+    </div>
+</div>

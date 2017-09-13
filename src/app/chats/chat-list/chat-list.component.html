@@ -1,0 +1,9 @@
+<div *ngFor="let chat of chats"
+class="card">
+    <a class="btn btn-primary"
+        routerLink="/chats/{{chat.chatId}}">
+        <span *ngFor="let user of chat.users; let i = index">{{ i != 0 ? ', ' : '' }}{{ user.firstName }}</span>
+    </a>
+</div>
+
+
