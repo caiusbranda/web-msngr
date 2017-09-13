@@ -53,10 +53,20 @@ router.get('/:id/content', function (req, res, next) {
 
         for (i in user.chats) {
             if (user.chats[i]._id == req.params.id) {
-                res.status(200).json({
-                    message: 'Successfully returned chats',
-                    messages: user.chats[i].messages
-                })
+                Message.populate(user.chats[i].messages, {path: 'author'}, function(){
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'Server error',
+                            error: err
+                        });
+                    }
+
+                    res.status(200).json({
+                        message: 'Successfully returned chats',
+                        messages: user.chats[i].messages
+                    })
+                });
+                
             }
         }
     })
@@ -96,16 +106,25 @@ router.post('/:id/content', function (req, res, next) {
                 });
             }
             Chats.update({ _id: chat._id }, {$push: { messages: message }}, function(err, raw) {
-                console.log(raw);
+                //console.log(raw);
             });
 
-            res.status(201).json({
-                message: 'Success',
-                obj: message
-            });
-        })
+            Message.populate(message, {path: 'author'}, function(err, message){
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error occurred',
+                        error: err
+                    });
+                }
+
+                res.status(201).json({
+                    message: 'Success',
+                    obj: message
+                });
+            }); 
+        });
     }
-})
+});
 
 // return a chat with a specific ID
 router.get('/:id', function (req, res, next) {
@@ -135,7 +154,15 @@ router.get('/', function(req, res, next) {
     User.findById(req.decoded.user._id).
     populate({
         path: 'chats',
-        populate: { path: 'users' } //populates the child users of chats
+        model: 'Chat',
+        populate: {
+            path: 'messages',
+            model: 'Message',
+            populate: {
+                path: 'author',
+                model: 'User'
+            }
+        } //populates children of chat (users, messages, and messages' author)
     }).
     exec(function(err, user) {
         if (err) {
@@ -144,10 +171,21 @@ router.get('/', function(req, res, next) {
                 error: err
             });
         }
-        res.status(200).json({
-            message: 'Successfully returned chats',
-            chats: user.chats
-        })
+
+        Chats.populate(user.chats, {path: 'users'}, function(err, chats){
+            if (err) {
+                return res.status(500).json({
+                    title: 'Server error',
+                    error: err
+                });
+            }
+            
+            res.status(200).json({
+                message: 'Successfully returned chats',
+                chats: chats
+            })
+        });
+        
     })
 });
 
@@ -202,7 +240,7 @@ router.post('/', function(req, res, next){
             
             for (var i = 0; i < validUsers.length; i++) {
                 User.update({ _id: validUsers[i]._id }, {$push: { chats: result }}, function(err, raw) {
-                    console.log(raw);
+                    //console.log(raw);
                 });
             }
         });

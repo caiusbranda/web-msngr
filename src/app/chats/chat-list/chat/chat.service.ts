@@ -1,3 +1,4 @@
+import { User } from '../../../auth/user.model';
 import { Message } from '../../message-list/message/message.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
@@ -24,7 +25,6 @@ export class ChatService {
                 for (const chat of newChats) {
                     const newChat = new Chat(chat.users, chat.messages, chat._id);
                     transformedChats.push(newChat);
-                    console.log(newChat);
                 }
                 this.chats = transformedChats;
                 return transformedChats;
@@ -38,6 +38,7 @@ export class ChatService {
                 return chat;
             }
         }
+        console.log('chat not found:' + id);
         this.router.navigateByUrl('/', {skipLocationChange: true});
     }
 
@@ -46,7 +47,7 @@ export class ChatService {
         const headers = new Headers({
             'Content-Type': 'application/json'
         });
-        console.log(body);
+
          // if token exists, set it equal to const token, else make const token empty
          const token = localStorage.getItem('token')
          ? '?token=' + localStorage.getItem('token') : '';
@@ -88,7 +89,21 @@ export class ChatService {
 
         return this.http.post('http://localhost:3000/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
             .map(
-                (response: Response) => chat.messages.push(response.json().obj)
+                (response: Response) => {
+                    // the model based on the mongoose schema
+                    // needs to be converted into Angular form of user
+
+                    const messageSchema = response.json().obj;
+                    const newMessage = new Message(
+                        messageSchema.contentText,
+                        new User(messageSchema.author.email,
+                            messageSchema.author.password,
+                            [], // currently message does not know about author's other chats
+                            messageSchema.author.firstName,
+                            messageSchema.author.lastName,
+                            ));
+                    chat.messages.push(newMessage);
+                }
             )
             .subscribe();
            /*  .map((response: Response) => {
