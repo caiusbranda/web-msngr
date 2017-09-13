@@ -30,11 +30,8 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
-<<<<<<< HEAD
     "bcryptjs": "^2.4.3",
-=======
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.4",
->>>>>>> FRONT-END-SETUP: Added more route logic, disabled the change in URL(needs to be improved in order to be enforced better), re-organized code
     "body-parser": "^1.18.0",
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.4.1",
