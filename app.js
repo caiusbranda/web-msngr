@@ -5,10 +5,14 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+
 // initialize routes
 const indexRoute = require('./server/routes/index');
 const userRoute = require('./server/routes/user');
 const chatsRoute = require('./server/routes/chats');
+
+// initialize socket events
+socketEvents = require('./server/socketEvents');  
 
 const app = express();
 
@@ -52,6 +56,10 @@ const server = http.createServer(app)
 // start the server
 server.listen(port);
 console.log("Server started on localhost:" + port);
+
+// set up the server to use socket.io
+const io = require('socket.io').listen(server);
+socketEvents(io);
 
 
 

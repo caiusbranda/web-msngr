@@ -30,8 +30,8 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
-    "bcryptjs": "^2.4.3",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.4",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.0",
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.4.1",
@@ -41,6 +41,7 @@
     "mongoose": "^4.11.10",
     "mongoose-unique-validator": "^1.0.5",
     "rxjs": "^5.4.2",
+    "socket.io": "^2.0.3",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
