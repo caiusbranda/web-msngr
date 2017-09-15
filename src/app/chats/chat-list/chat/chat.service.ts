@@ -5,11 +5,17 @@ import { Observable } from 'rxjs/Rx';
 import { Chat } from '../../chat.model';
 import { Headers, Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
+import * as io from 'socket.io-client';
 
 @Injectable()
 export class ChatService {
     private chats: Chat[] = [];
-    constructor(private router: Router, private http: Http) {}
+    private socket: any;
+
+    constructor(private router: Router, private http: Http) {
+        this.socket = io();
+    }
+
 
     getChats() {
 
@@ -21,6 +27,10 @@ export class ChatService {
             .map((response: Response) => {
                 const newChats = response.json().chats;
                 const transformedChats: Chat[] = [];
+
+                // console.log(this.socket);
+
+                // this.socket.emit('get chats', newChats);
 
                 for (const chat of newChats) {
                     const newChat = new Chat(chat.users, chat.messages, chat._id);
@@ -102,6 +112,7 @@ export class ChatService {
                             messageSchema.author.firstName,
                             messageSchema.author.lastName,
                             ));
+                    chat.addMessage(newMessage);
                     chat.messages.push(newMessage);
                 }
             )
@@ -114,5 +125,20 @@ export class ChatService {
             })
             .catch((error: Response) => Observable.throw(error.json())); */
     }
+
+    listen(event: string): Observable<any> {
+
+            return new Observable(observer => {
+
+              this.socket.on(event, data => {
+                observer.next(data);
+              });
+
+              // observable is disposed
+              return () => {
+                this.socket.off(event);
+              };
+            });
+        }
 }
 
