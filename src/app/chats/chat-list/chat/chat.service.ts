@@ -35,7 +35,7 @@ export class ChatService {
         const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
 
 
-        return this.http.get('http://localhost:3000/api/chats' + token)
+        return this.http.get('/api/chats' + token)
             .map((response: Response) => {
                 const newChats = response.json().chats;
                 const transformedChats: Chat[] = [];
@@ -78,7 +78,7 @@ export class ChatService {
          const token = localStorage.getItem('token')
          ? '?token=' + localStorage.getItem('token') : '';
 
-        return this.http.post('http://localhost:3000/api/chats' + token, body, {headers: headers})
+        return this.http.post('/api/chats' + token, body, {headers: headers})
             .map((response: Response) => {
                 const result = response.json();
                 const newChat = new Chat(result.obj.users, [], result.obj.name, result.obj._id);
@@ -104,7 +104,7 @@ export class ChatService {
          const token = localStorage.getItem('token')
          ? '?token=' + localStorage.getItem('token') : '';
 
-        return this.http.delete('http://localhost:3000/api/message/' + chat.chatId + token)
+        return this.http.delete('/api/message/' + chat.chatId + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => Observable.throw(error.json()));
     }
@@ -137,7 +137,7 @@ export class ChatService {
         chat.messageAdded.next();
         chat.addMessage(tempMessage);
 
-        return this.http.post('http://localhost:3000/api/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
+        return this.http.post('/api/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
             .map(
                 (response: Response) => {
                     // the model based on the mongoose schema
