@@ -1,0 +1,22 @@
+.chat-window {
+    padding-top: 10px;
+    overflow-y: scroll;
+    height: calc(100vh - 56px);
+    /* background-color: #232B2D; */
+    bottom: 0;
+    width: 100%;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.msg-scroll {
+    height: calc(99% - 79px);
+    overflow-y: scroll;
+    margin-bottom: 4px;
+    padding: 5px;
+}
+
+:host {
+    width: 100%;
+    height: 100%;
+}

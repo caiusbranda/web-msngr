@@ -7,9 +7,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 // initialize routes
-const indexRoute = require('./server/routes/index');
-const userRoute = require('./server/routes/user');
-const chatsRoute = require('./server/routes/chats');
+const apiRoutes = require('./server/routes/api');
 
 // initialize socket events
 socketEvents = require('./server/socketEvents');  
@@ -40,9 +38,8 @@ app.use(bodyParser.urlencoded( { extended: false }))
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // setting up routes
-app.use('/test', indexRoute);
-app.use('/user', userRoute);
-app.use('/chats', chatsRoute);
+app.use('/api', apiRoutes);
+
 
 // redirect other requests to the index
 app.get('*', function (req, res) {

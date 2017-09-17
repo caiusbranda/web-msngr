@@ -1,0 +1,15 @@
+.custom-input {
+    width: 100%;
+    background-color: #e4e4da;
+    border-radius: 40px;
+}
+
+.send-button {
+    background-color: #fc3821;
+    border-color: #676c72;
+    width: 100%;
+}
+
+.send-button:active {
+    background: #a1a1a1;
+}

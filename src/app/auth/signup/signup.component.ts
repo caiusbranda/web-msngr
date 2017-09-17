@@ -18,22 +18,17 @@ export class SignupComponent implements OnInit {
         const user = new User(
             this.myForm.value.email,
             this.myForm.value.password,
-            [],
-            this.myForm.value.firstName,
-            this.myForm.value.lastName
+            this.myForm.value.name,
+            []
         );
         this.authService.signup(user)
-            .subscribe(
-                data => console.log(data),
-                error => console.error(error)
-            );
+            .subscribe();
         this.myForm.reset();
     }
 
     ngOnInit() {
         this.myForm = new FormGroup({
-            firstName: new FormControl(null, Validators.required),
-            lastName: new FormControl(null, Validators.required),
+            name: new FormControl(null, Validators.required),
             email: new FormControl(null, [
                 Validators.required,
                 // tslint:disable-next-line:max-line-length

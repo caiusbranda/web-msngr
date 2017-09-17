@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common/src/pipes/date_pipe';
 import { Message } from './message.model';
 import { Component, Input, OnInit } from '@angular/core';
 

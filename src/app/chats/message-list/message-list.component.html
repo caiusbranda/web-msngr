@@ -1,6 +1,9 @@
-<app-message 
-    *ngFor="let message of messages; let i = index"
-    [message]="message"
-    [previousMessage]="i > 0 ? messages[i-1] : null"
-    class="card bg-light {{i > 0 &amp;&amp; messages[i-1].author.email === message.author.email ? 'mt-0' : 'mt-2'}}">
-</app-message>
+<div class="row custom-row"
+    *ngFor="let message of messages; let i = index">
+    <app-message 
+        [message]="message"
+        [previousMessage]="i > 0 ? messages[i-1] : null"
+        class="card chat-bubble {{i > 0 &amp;&amp; messages[i-1].author.email === message.author.email ? 'message-margin' : 'mt-2'}}"
+        [ngClass]="{ 'ml-auto': message.author.email === currentUser }">
+    </app-message>
+</div>

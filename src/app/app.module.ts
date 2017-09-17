@@ -1,3 +1,4 @@
+import { ChatResolver } from './chats/chat-list/chat/chat.resolver';
 import { ChatService } from './chats/chat-list/chat/chat.service';
 import { AuthService } from './auth/auth.service';
 import { HttpModule } from '@angular/http';
@@ -46,7 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgbModule.forRoot()
   ],
-  providers: [AuthService, ChatService],
+  providers: [AuthService, ChatService, ChatResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

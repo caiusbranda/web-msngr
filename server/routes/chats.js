@@ -96,6 +96,7 @@ router.post('/:id/content', function (req, res, next) {
     function addMessage(chat) {
         var message = new Message({
             contentText: req.body.contentText,
+            date: req.body.date,
             author: req.decoded.user
         });
         message.save(function (err, message) {
@@ -222,7 +223,8 @@ router.post('/', function(req, res, next){
 
         var chat = new Chats({
             users: validUsers,
-            messages: []
+            messages: [],
+            name: req.body.name
         });
 
         chat.save(function (err, result) {
