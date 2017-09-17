@@ -13,7 +13,7 @@ function verifyToken(req, res, next) {
         });
     }
     
-    jwt.verify(token, 'secret', function(err, decoded) {
+    jwt.verify(token, process.env.secret, function(err, decoded) {
         if (err) {
             return res.status(401).json({
                 title: 'Not Authenticated',
@@ -104,7 +104,7 @@ router.post('/signin', function(req, res, next){
             });
         }
 
-        var token = jwt.sign({user: user}, 'secret', { expiresIn: 7200});
+        var token = jwt.sign({user: user}, process.env.secret, { expiresIn: 7200});
         res.status(200).json({
             message: 'Successfully logged in',
             token: token,
