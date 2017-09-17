@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MessageListComponent implements OnInit {
     @Input() messages: Message[] = [];
+    currentUser = localStorage.getItem('email');
 
     constructor() { }
 

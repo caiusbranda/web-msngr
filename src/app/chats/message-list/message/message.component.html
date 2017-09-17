@@ -1,11 +1,13 @@
 
-<p class="card-header"
+<p class="card-subtitle" [ngStyle]="{'color': 'orange'}"
     *ngIf="!(previousMessage &amp;&amp; previousMessage.author.email === message.author.email)"
     >
     
-    {{ message.author.firstName }}
+    <strong>{{ message.author.name}}</strong>
 </p>
 
 <p class="card-text">
-    {{ message.contentText }}
+    <span> {{ message.contentText }} </span> 
+    <span class="text-right"> 
+        <sub class="text-muted">{{ message.date | date:'short' }}</sub></span>
 </p>

@@ -21,12 +21,13 @@ export class NewChatComponent implements OnInit {
 
         userEmails.map(function(userEmail){
             userEmail.trim();
-            users.push(new User(userEmail, ''));
+            users.push(new User(userEmail, '', ''));
         });
 
         const chat = new Chat(
             users,
-            []
+            [],
+            this.myForm.value.name
         );
         this.chatService.addChat(chat)
             .subscribe(
@@ -40,7 +41,8 @@ export class NewChatComponent implements OnInit {
 
     ngOnInit() {
         this.myForm = new FormGroup({
-            users: new FormControl(null, Validators.required)
+            users: new FormControl(null, Validators.required),
+            name: new FormControl(null, Validators.required)
         });
     }
 }

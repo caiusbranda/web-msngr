@@ -1,14 +1,17 @@
-<form class="form-inline mt-2 w-50" [formGroup]="myForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
+<form class="form-inline" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="form-group col-md-10">
         <input
                 type="text"
                 placeholder="enter msg"
                 id="message"
-                class="form-control"
+                class="form-control custom-input"
                 formControlName="message">
     </div>
-    <button
-            class="btn btn-primary"
-            type="submit"
-            [disabled]="!myForm.valid">Enter</button>
+    <div class="col-md-2">
+        <button
+                class="btn btn-primary send-button"
+                type="submit"
+                [disabled]="!myForm.valid">Send</button>
+    </div>
+            
 </form>

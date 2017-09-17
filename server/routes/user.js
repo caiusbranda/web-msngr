@@ -38,7 +38,9 @@ router.post('/signin', function(req, res, next){
         res.status(200).json({
             message: 'Successfully logged in',
             token: token,
-            userId: user._id
+            userId: user._id,
+            name: user.name, 
+            email: user.email 
         })
          
     })
@@ -48,8 +50,7 @@ router.post('/signin', function(req, res, next){
 // creating a new user
 router.post('/', function (req, res, next) {
     var user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        name: req.body.name,
         password: bcrypt.hashSync(req.body.password, 10),
         email: req.body.email,
         chats: []
