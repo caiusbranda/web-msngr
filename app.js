@@ -20,15 +20,11 @@ var options = {
     pass: process.env.password
   };
 
-console.log(options);
 mongoose.connect('mongodb://ds129144.mlab.com:29144/web-msngr', options, function(err){
     if (err) {
         console.log(err);
     }
 });
-
-/* mongoose.connect('mongodb://' + username + 
-    ':' + password + '@ds129144.mlab.com:29144/web-msngr'); */
 
 // set up body data parsing middleware
 app.use(bodyParser.json());
