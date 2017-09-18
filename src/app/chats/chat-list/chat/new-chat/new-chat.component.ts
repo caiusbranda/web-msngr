@@ -40,7 +40,7 @@ export class NewChatComponent implements OnInit {
         this.chatService.addChat(newChat)
         .subscribe(
             data => {
-                this.router.navigateByUrl('/chats/' + data.chatId);
+                this.router.navigateByUrl('/chats/' + data.chatId, {skipLocationChange: true});
             },
             error => console.error(error)
         );

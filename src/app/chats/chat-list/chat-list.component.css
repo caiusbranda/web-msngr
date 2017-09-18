@@ -8,3 +8,14 @@
     width:100%;
     height:100%;
 }
+
+a.btn-primary.btn-custom.custom-activated {
+    background-color: lightgray;
+    color: #232B2D;
+}
+
+a.custom-activated:hover {
+    background-color: lightgray;
+    color: #232B2D;
+}
+

@@ -7,21 +7,22 @@
     <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav mr-auto">
             <li *ngIf="isLoggedIn()" routerLinkActive="active"  class="nav-item">
-                <a class="nav-link" skipLocationChange="true" routerLink="/chats">Chats</a>
+                <a class="nav-link" routerLink="/chats">Chats<i class="fa fa-comments-o ml-1" aria-hidden="true"></i></a>
             </li>
             <li *ngIf="isLoggedIn()" routerLinkActive="active"  class="nav-item">
-                    <a class="nav-link" skipLocationChange="true" routerLink="/user">Profile</a>
+                    <a class="nav-link" routerLink="/user">Profile <i class="fa fa-user ml-1" aria-hidden="true"></i>
+                    </a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li *ngIf="!isLoggedIn()" routerLinkActive="active" class="nav-item">
-                <a class="nav-link" skipLocationChange="true" routerLink="/login">Login</a>
+                <a class="nav-link" routerLink="/login">Login</a>
             </li>
             <li *ngIf="!isLoggedIn()" routerLinkActive="active" class="nav-item">
-                <a class="nav-link" skipLocationChange="true" routerLink="/signup">Sign Up</a>
+                <a class="nav-link" routerLink="/signup">Sign Up</a>
             </li>
             <li *ngIf="isLoggedIn()" routerLinkActive="active" class="nav-item">
-                <a class="nav-link" skipLocationChange="true" routerLink="/logout">Logout</a>
+                <a class="nav-link" routerLink="/logout">Logout</a>
             </li>
         </ul>
     </div>

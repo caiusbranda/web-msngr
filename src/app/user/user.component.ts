@@ -17,11 +17,11 @@ export class UserComponent implements OnInit {
 
     constructor(private userService: UserService, private route: ActivatedRoute,
         private router: Router) {
-        route.data.pluck('user').map(
+/*         route.data.pluck('user').map(
             (value: User) => {
                 this.currentUser = value;
             }
-        );
+        ); */
      }
 
     onSubmit() {
@@ -30,7 +30,6 @@ export class UserComponent implements OnInit {
             newFriends.push(element.value);
         });
         this.userService.addFriends(newFriends).subscribe();
-        this.router.navigateByUrl('/user');
     }
 
     createItem(): FormGroup {
@@ -60,6 +59,7 @@ export class UserComponent implements OnInit {
         this.myForm = this.formBuilder.group({
             emails: this.formBuilder.array([this.createItem()])
         });
+        this.emails = this.myForm.get('emails') as FormArray;
     }
 
 }

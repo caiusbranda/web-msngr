@@ -1,3 +1,4 @@
+import { ErrorService } from '../errors/errors.service';
 import { Observable } from 'rxjs/Rx';
 import { Http, Response, Headers } from '@angular/http';
 import { User } from '../auth/user.model';
@@ -9,7 +10,7 @@ export class UserService {
 
     currentUser: User;
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private errorService: ErrorService) {
         this.getCurrentUser().subscribe();
     }
 
@@ -26,7 +27,10 @@ export class UserService {
             this.currentUser = newUser;
             return newUser;
         })
-        .catch((error: Response) => Observable.throw(error));
+        .catch((error: Response) => {
+            this.errorService.handleError(error.json());
+            return Observable.throw(error.json());
+        });
     }
 
     addFriends(users) {
@@ -41,7 +45,17 @@ export class UserService {
             ? '?token=' + localStorage.getItem('token') : '';
 
         return this.http.post('/api/user/friends' + token, body, {headers: headers})
-            .catch((error: Response) => Observable.throw(error.json()));
+            .map((response: Response) => {
+                const newFriends = response.json().users;
+                for (let i = 0; i < newFriends.length; ++i) {
+                    this.currentUser.friends.push(newFriends[i]);
+                }
+                return response;
+            })
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            });
     }
 
 

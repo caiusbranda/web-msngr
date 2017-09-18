@@ -1,4 +1,4 @@
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from '../user.model';
 import { AuthService } from '../auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 export class SignupComponent implements OnInit {
     myForm: FormGroup;
 
-    constructor(private authService: AuthService, private route: ActivatedRoute) {}
+    constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
     onSubmit() {
         const user = new User(
@@ -26,6 +26,7 @@ export class SignupComponent implements OnInit {
         this.authService.signup(user)
             .subscribe();
         this.myForm.reset();
+        this.router.navigateByUrl('/signin');
     }
 
     ngOnInit() {

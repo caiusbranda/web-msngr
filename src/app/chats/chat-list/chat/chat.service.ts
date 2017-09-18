@@ -1,3 +1,4 @@
+import { ErrorService } from '../../../errors/errors.service';
 import { DatePipe } from '@angular/common/src/pipes/date_pipe';
 import { User } from '../../../auth/user.model';
 import { Message } from '../../message-list/message/message.model';
@@ -14,7 +15,7 @@ export class ChatService {
     private socket: any;
     messageAdded = new Subject();
 
-    constructor(private router: Router, private http: Http) {
+    constructor(private errorService: ErrorService, private router: Router, private http: Http) {
         this.socket = io();
 
         // listen for chats associated with the currently logged in ID
@@ -54,7 +55,10 @@ export class ChatService {
                 this.chats = transformedChats;
                 return this.chats;
             })
-            .catch((error: Response) => Observable.throw(error));
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            });
     }
 
     getChat(id: string) {
@@ -98,7 +102,10 @@ export class ChatService {
 
                 return newChat;
             })
-            .catch((error: Response) => Observable.throw(error.json()));
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            });
     }
 
     deleteChat(chat: Chat) {
@@ -109,7 +116,10 @@ export class ChatService {
 
         return this.http.delete('/api/message/' + chat.chatId + token)
             .map((response: Response) => response.json())
-            .catch((error: Response) => Observable.throw(error.json()));
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            });
     }
 
     addMessage(chat: Chat, message: string) {
@@ -159,6 +169,10 @@ export class ChatService {
 
                 }
             )
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            })
             .subscribe();
            /*  .map((response: Response) => {
                 const result = response.json();

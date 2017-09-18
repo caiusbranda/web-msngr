@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('userId', data.userId);
                     localStorage.setItem('name', data.name);
                     localStorage.setItem('email', data.email);
-                    this.router.navigateByUrl('/');
+                    this.router.navigateByUrl('/chats');
                 },
                 error => console.error(error)
             );
