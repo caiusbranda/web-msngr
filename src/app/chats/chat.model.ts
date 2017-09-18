@@ -7,6 +7,7 @@ import * as io from 'socket.io-client';
 export class Chat {
     socket: any;
     messageAdded = new Subject();
+    currentlyTyping = '';
 
     constructor(
         public users: User[],
@@ -21,8 +22,22 @@ export class Chat {
                 this.messages.push(msg);
                 this.messageAdded.next();
             });
+            // listen to who is typing
+            this.listen('typing').subscribe(
+                (user) => {
+                    this.currentlyTyping = user;
+                }
+            );
 
         }
+
+    startedTyping() {
+        this.socket.emit('typing', this.chatId, localStorage.getItem('name'));
+    }
+
+    stoppedTyping() {
+        this.socket.emit('typing', this.chatId, '');
+    }
 
     addMessage(msg: Message) {
         this.socket.emit('new message', this.chatId, msg);

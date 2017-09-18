@@ -20,11 +20,6 @@ export class ChatsComponent implements OnInit {
         }
 
         ngOnInit() {
-            this.chatService.getChats().
-                subscribe(
-                    (allChats: Chat[]) => {
-                        this.chats = allChats;
-                    }
-                );
+            this.chats = this.chatService.getServiceChats();
         }
 }
