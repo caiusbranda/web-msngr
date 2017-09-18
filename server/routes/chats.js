@@ -201,9 +201,14 @@ router.post('/', function(req, res, next){
     // loop through each participant and find their user object
     participants.forEach(function(participant) {
         User.findOne({email: participant.email}, function(err, party) {
+            if(err){
+                return res.status(500).json({
+                    message: 'One or more invalid users!'
+                });
+            }
             validUsers.push(party)
             completed++;
-            if (completed == participants.length) {
+            if (completed === participants.length) {
                 saveChat();
             }
         });
@@ -217,7 +222,7 @@ router.post('/', function(req, res, next){
                 error: 'None of the entered participants are registered'
             })
         }
-
+        console.log(validUsers[1]);
         // add ourselves to the chat
         validUsers.push(req.decoded.user);
 
@@ -230,11 +235,11 @@ router.post('/', function(req, res, next){
         chat.save(function (err, result) {
             if (err) {
                 return res.status(500).json({
-                    title: 'An error occurred',
+                    title: 'An error occurred while saving chat',
                     error: err
                 });
             }
-    
+
             res.status(201).json({
                 message: 'Success',
                 obj: result
@@ -245,6 +250,7 @@ router.post('/', function(req, res, next){
                     //console.log(raw);
                 });
             }
+            
         });
 
     }

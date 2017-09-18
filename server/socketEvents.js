@@ -31,14 +31,9 @@ exports = module.exports = function(io) {
         });
 
         // While there are any characters typed out (the user does not have to be actively typing)
-        socket.on('start typing', (chat) => {
-            socket.to(chat).emit('typing', userId)
+        socket.on('typing', (chat, user) => {
+            socket.to(chat).emit('typing', user);
         })
-        
-        // when there is no message typed up
-        socket.on('stop typing', (chat) => {
-            socket.to(chat).emit('typing', userId)
-        });
 
         socket.on('disconnect', () => {
             // console.log('user disconnected');

@@ -28,6 +28,9 @@ export class ChatService {
         );
     }
 
+    getServiceChats() {
+        return this.chats;
+    }
 
     getChats() {
 
@@ -118,7 +121,8 @@ export class ChatService {
                 '',
                 localStorage.getItem('name'),
                 [],
-                localStorage.getItem('userId')
+                localStorage.getItem('userId'),
+                []
             ),
             Date.now()
         );
@@ -134,9 +138,8 @@ export class ChatService {
 
 
         chat.messages.push(tempMessage);
-        chat.messageAdded.next();
         chat.addMessage(tempMessage);
-
+        chat.messageAdded.next();
         return this.http.post('/api/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
             .map(
                 (response: Response) => {

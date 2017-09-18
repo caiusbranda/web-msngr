@@ -6,8 +6,11 @@
 
     <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav mr-auto">
-            <li routerLinkActive="active"  class="nav-item">
-                <a class="nav-link" skipLocationChange="true" routerLink="/">Chats</a>
+            <li *ngIf="isLoggedIn()" routerLinkActive="active"  class="nav-item">
+                <a class="nav-link" skipLocationChange="true" routerLink="/chats">Chats</a>
+            </li>
+            <li *ngIf="isLoggedIn()" routerLinkActive="active"  class="nav-item">
+                    <a class="nav-link" skipLocationChange="true" routerLink="/user">Profile</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">

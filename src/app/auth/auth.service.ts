@@ -36,4 +36,15 @@ export class AuthService {
     isLoggedIn() {
         return localStorage.getItem('token') !== null;
     }
+
+    isAuthenticated() {
+        const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+
+        return this.http.get('/api/user/authenticate/' + token)
+        .map((response: Response) => {
+            const auth = response.json().success;
+            return auth;
+        })
+        .catch((error: Response) => Observable.throw(error));
+    }
 }

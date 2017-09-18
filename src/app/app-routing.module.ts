@@ -1,3 +1,5 @@
+import { UserResolver } from './user/user.resolver';
+import { UserComponent } from './user/user.component';
 import { ChatResolver } from './chats/chat-list/chat/chat.resolver';
 import { ChatComponent } from './chats/chat-list/chat/chat.component';
 import { NewChatComponent } from './chats/chat-list/chat/new-chat/new-chat.component';
@@ -15,8 +17,9 @@ const appRoutes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
+  { path: 'user', component: UserComponent, resolve: {user: UserResolver}},
   { path: 'chats', component: ChatsComponent, resolve: {chat: ChatResolver}, children: [
-      { path: 'new', component: NewChatComponent },
+      { path: 'new', component: NewChatComponent, resolve: {user: UserResolver} },
       { path: ':id', component: ChatComponent}
   ] }
   /* { path: 'recipes', component: RecipesComponent, children: [

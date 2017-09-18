@@ -10,7 +10,7 @@ router.use('/user', userRoute);
 router.use('/chats', chatsRoute);
 
 router.get('*', function (req, res) {
-    res.err('invalid api request');
+    res.send('invalid api request');
 });
 
 module.exports = router;

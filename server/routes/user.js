@@ -7,7 +7,7 @@ var User = require('../models/user');
 function verifyToken(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {
-        return res.status(403).send({ 
+        return res.status(403).json({ 
             success: false, 
             message: 'No token provided.' 
         });
@@ -16,6 +16,7 @@ function verifyToken(req, res, next) {
     jwt.verify(token, process.env.secret, function(err, decoded) {
         if (err) {
             return res.status(401).json({
+                success: false,
                 title: 'Not Authenticated',
                 error: err
             });
@@ -25,13 +26,44 @@ function verifyToken(req, res, next) {
     });
 }
 
+function verifyToken2(req, res, next) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (!token) {
+        return res.status(200).json({ 
+            success: false, 
+            message: 'No token provided.' 
+        });
+    }
+    
+    jwt.verify(token, process.env.secret, function(err, decoded) {
+        if (err) {
+            return res.status(200).json({
+                success: false,
+                title: 'Not Authenticated',
+                error: err
+            });
+        }
+        req.decoded = decoded;
+        next();
+    });
+}
+
+router.get('/authenticate', verifyToken2, function(req,res) {
+    return res.status(200).json({
+        success: true
+    });
+});
+
 // getting user information
 router.get('/', verifyToken, function (req, res, next) {
     User.findById(req.decoded.user._id).
     populate('chats').
     populate('friends').
     exec(function(err, user){
-        res.send(user);
+        res.status(200).json({
+            message: 'Successfully returned user',
+            user: user
+        })
     });
 });
 
@@ -67,7 +99,7 @@ router.post('/friends', verifyToken, function (req, res, next) {
         // add ourselves to the users' friends list and add them to our friends list
         for (var i = 0; i < validUsers.length; i++) {
             User.update({ _id: req.decoded.user._id}, {$push: { friends: validUsers[i]}}, function(err, raw) {
-                User.update({ _id: validUsers[i]._id }, {$push: { friends: req.decoded.user}}, function(err, raw) {
+                User.update({ email: validUsers[i].email }, {$push: { friends: req.decoded.user}}, function(err, raw) {
                     console.log(raw);
                 });
             })

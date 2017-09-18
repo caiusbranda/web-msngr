@@ -3,3 +3,8 @@
     background-color: #385169;
     border-color: #CFC7C7;
 }
+
+:host {
+    width:100%;
+    height:100%;
+}

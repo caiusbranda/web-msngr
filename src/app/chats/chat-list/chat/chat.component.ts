@@ -1,3 +1,4 @@
+
 import { elementDef } from '@angular/core/src/view/element';
 
 import { timeInterval } from 'rxjs/operator/timeInterval';
@@ -11,8 +12,11 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChi
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewInit{
+export class ChatComponent implements OnInit, AfterViewInit {
     private currentChat: Chat;
+    private chatUsers: string;
+    private typing = false;
+    private timeout = null;
     @ViewChild('chatScroll') private scrollContainer: ElementRef;
     disableScrollDown = false;
 
@@ -23,6 +27,14 @@ export class ChatComponent implements OnInit, AfterViewInit{
         .subscribe(
             (params: Params) => {
                 this.currentChat = this.chatService.getChat(params['id']);
+                this.chatUsers = '';
+                const userAmount = this.currentChat.users.length;
+                for (let i = 0; i < userAmount; ++i) {
+                    this.chatUsers += this.currentChat.users[i].name;
+                    if (i !== userAmount - 1) {
+                        this.chatUsers += ', ';
+                    }
+                }
             }
         );
 
@@ -33,9 +45,28 @@ export class ChatComponent implements OnInit, AfterViewInit{
         );
   }
 
-  ngAfterViewInit() {
-      this.scrollToBottom();
-  }
+    onKeyUp() {
+        if (!this.typing) {
+            this.typing = true;
+            this.currentChat.startedTyping();
+        }
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            this.typing = false;
+            this.currentChat.stoppedTyping();
+        }, 1500);
+    }
+
+    getCurrentTyping(): string {
+        if (this.currentChat.currentlyTyping !== '') {
+            return this.currentChat.currentlyTyping + ' is typing...';
+        }
+        return '';
+    }
+
+    ngAfterViewInit() {
+        this.scrollToBottom();
+    }
 
 
     private onScroll() {
@@ -51,9 +82,9 @@ export class ChatComponent implements OnInit, AfterViewInit{
     }
 
     private scrollToBottom(): void {
-        if (this.disableScrollDown) {
+        /* if (this.disableScrollDown) {
             return;
-        }
+        } */
         setTimeout(() => {
             try {
                 this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
