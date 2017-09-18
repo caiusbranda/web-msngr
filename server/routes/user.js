@@ -9,7 +9,8 @@ function verifyToken(req, res, next) {
     if (!token) {
         return res.status(403).json({ 
             success: false, 
-            message: 'No token provided.' 
+            title: 'Not logged in!',
+            error: { message: 'Please login first!' }
         });
     }
     
@@ -17,8 +18,8 @@ function verifyToken(req, res, next) {
         if (err) {
             return res.status(401).json({
                 success: false,
-                title: 'Not Authenticated',
-                error: err
+                title: 'Not logged in!',
+                error: { message: 'Please login first!'}
             });
         }
         req.decoded = decoded;
@@ -80,7 +81,7 @@ router.post('/friends', verifyToken, function (req, res, next) {
     // loop through each participant and find their user object
     participants.forEach(function(participant) {
         User.findOne({email: participant.email}, function(err, party) {
-            validUsers.push(party)
+            validUsers.push(party);
             completed++;
             if (completed == participants.length) {
                 addFriend();
@@ -92,21 +93,24 @@ router.post('/friends', verifyToken, function (req, res, next) {
         if (validUsers.length == 0) {
             return res.status(500).json({
                 title: 'No valid users found',
-                error: 'None of the entered participants are registered'
+                error: { message:'None of the entered participants are registered'}
             })
         }
 
         // add ourselves to the users' friends list and add them to our friends list
         for (var i = 0; i < validUsers.length; i++) {
+            // return res.send({users: validUsers, length: validUsers.length, id: validUsers[0]._id});
             User.update({ _id: req.decoded.user._id}, {$push: { friends: validUsers[i]}}, function(err, raw) {
-                User.update({ email: validUsers[i].email }, {$push: { friends: req.decoded.user}}, function(err, raw) {
-                    console.log(raw);
-                });
-            })
+                
+            });
+            User.update({ _id: validUsers[i]._id }, {$push: { friends: req.decoded.user}}, function(err, raw) {
+                // console.log(raw);
+            });
         }
 
-        res.status(201).json({
-            message: 'Success'
+        return res.status(201).json({
+            message: 'Success',
+            users: validUsers
         });
     }
 });
@@ -117,22 +121,22 @@ router.post('/signin', function(req, res, next){
     User.findOne({email: req.body.email}, function(err, user) {
         if (err) {
             return res.status(500).json({
-                title: 'A server error occurred',
-                error: err
+                title: 'Invalid password or email.',
+                error: { message: 'Please try logging in again' }
             });
         }
 
         if (!user) {
             return res.status(401).json({
-                title: 'Login failed. Invalid credentials.',
-                error: err
+                title: 'Invalid password or email.',
+                error: { message: 'Please try logging in again' }
             });
         }
 
         if (!bcrypt.compareSync(req.body.password, user.password)) {
             return res.status(401).json({
-                title: 'Login failed. Invalid credentials.',
-                error: err
+                title: 'Invalid password or email.',
+                error: { message: 'Please try logging in again' }
             });
         }
 
@@ -162,8 +166,8 @@ router.post('/', function (req, res, next) {
     user.save(function (err, result) {
         if (err) {
             return res.status(500).json({
-                title: 'A server error occurred',
-                error: err
+                title: 'Email is already taken',
+                error: { message: 'Please use a different email!' }
             });
         }
         res.status(201).json({

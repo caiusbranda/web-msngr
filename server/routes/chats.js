@@ -11,15 +11,17 @@ router.use('/', function(req, res, next) {
     if (!token) {
         return res.status(403).send({ 
             success: false, 
-            message: 'No token provided.' 
+            title: 'Not logged in!',
+            error: { message: 'Please login first!' } 
         });
     }
 
     jwt.verify(token, process.env.secret, function(err, decoded) {
         if (err) {
             return res.status(401).json({
-                title: 'Not Authenticated',
-                error: err
+                success: false, 
+                title: 'Not logged in!',
+                error: { message: 'Please login first!' }
             });
         }
         req.decoded = decoded; 
@@ -203,7 +205,8 @@ router.post('/', function(req, res, next){
         User.findOne({email: participant.email}, function(err, party) {
             if(err){
                 return res.status(500).json({
-                    message: 'One or more invalid users!'
+                    title: "Error finding user",
+                    err: { message: 'One or more invalid users!' }
                 });
             }
             validUsers.push(party)
@@ -219,10 +222,10 @@ router.post('/', function(req, res, next){
         if (validUsers.length == 0) {
             return res.status(500).json({
                 title: 'No valid users found',
-                error: 'None of the entered participants are registered'
+                error: { message: 'None of the entered participants are registered' }
             })
         }
-        console.log(validUsers[1]);
+
         // add ourselves to the chat
         validUsers.push(req.decoded.user);
 
