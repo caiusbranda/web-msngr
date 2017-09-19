@@ -40,6 +40,11 @@
                         type="submit"
                         [disabled]="!myForm.valid">Create Chat</button>
             </form>
+
+            <h4 *ngIf="formFail"
+            class="text-danger">
+            Please select at least one friend before attempting to create a chat!
+            </h4>
     </div>
 </div>
 

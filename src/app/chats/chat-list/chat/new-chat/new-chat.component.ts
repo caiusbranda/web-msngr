@@ -15,6 +15,7 @@ export class NewChatComponent implements OnInit {
     myForm: FormGroup;
     currentUser: User;
     isClicked = [];
+    formFail = false;
 
     @ViewChildren('friends') private selectedFriends: QueryList<ElementRef>;
     // @ViewChildren('friends') private selectedFriends: QueryList<'friends'>;
@@ -30,6 +31,12 @@ export class NewChatComponent implements OnInit {
                 friends.push({email: val.nativeElement.name});
             }
         });
+
+        if (friends.length === 0) {
+            this.formFail = true;
+            return;
+        }
+        this.formFail = false;
 
         const newChat = new Chat(
             friends,
@@ -50,27 +57,6 @@ export class NewChatComponent implements OnInit {
 
     onSubmit() {
         this.submitChat();
-        /* const userEmails = this.myForm.value.users.split(',');
-        const users: User[] = [];
-
-        userEmails.map(function(userEmail){
-            userEmail.trim();
-            users.push(new User(userEmail, '', '', [], '', []));
-        });
-
-        const chat = new Chat(
-            users,
-            [],
-            this.myForm.value.name
-        );
-        this.chatService.addChat(chat)
-            .subscribe(
-                data => {
-                    this.router.navigateByUrl('/chats/' + data.chatId);
-                },
-                error => console.error(error)
-            );
-        this.myForm.reset(); */
     }
 
     ngOnInit() {

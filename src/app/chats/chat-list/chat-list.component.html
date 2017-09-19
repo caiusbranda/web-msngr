@@ -11,7 +11,12 @@ class="card mt-2">
     skipLocationChange="true" routerLink="/chats/{{chat.chatId}}">
 <!--         <span *ngFor="let user of chat.users; let i = index">{{ i != 0 ? ', ' : '' }}{{ user.firstName }}</span>
  -->   
-        <strong>{{ chat.name }}</strong>
+        <strong>{{ chat.name }} <i *ngIf="chat.newMessage" class="fa fa-comment ml-1" aria-hidden="true"></i>
+        </strong>
+        <hr class="my-2">
+        <p class="text-muted">
+            {{ chat.messages.length > 0 ? (chat.messages[chat.messages.length-1].author.name + ': ' + chat.messages[chat.messages.length-1].contentText) : ''}}
+        </p>
      </a>
 </div>
 

@@ -19,3 +19,12 @@ a.custom-activated:hover {
     color: #232B2D;
 }
 
+p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+i.fa.fa-comment {
+    color: green;
+}

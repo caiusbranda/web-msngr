@@ -3,7 +3,7 @@
         <span class="text-muted smaller-text">{{ this.chatUsers }}</span></h3>
     <p class="currently-typing text-white p-0">{{ this.getCurrentTyping() }}</p>
 </div>
-<div class="msg-scroll" #chatScroll (scroll)="onScroll()">
+<div class="msg-scroll" #chatScroll>
     <app-message-list [messages]="this.currentChat.messages"></app-message-list>
 
 </div>

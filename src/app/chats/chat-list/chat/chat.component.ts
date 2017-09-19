@@ -1,3 +1,4 @@
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { elementDef } from '@angular/core/src/view/element';
 
@@ -5,18 +6,19 @@ import { timeInterval } from 'rxjs/operator/timeInterval';
 import { ChatService } from './chat.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Chat } from '../../chat.model';
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewInit {
+export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private currentChat: Chat;
     private chatUsers: string;
     private typing = false;
     private timeout = null;
+    newMessage: Subscription;
     @ViewChild('chatScroll') private scrollContainer: ElementRef;
     disableScrollDown = false;
 
@@ -27,6 +29,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
         .subscribe(
             (params: Params) => {
                 this.currentChat = this.chatService.getChat(params['id']);
+                this.currentChat.newMessage = false;
+                this.scrollToBottom();
                 this.chatUsers = '';
                 const userAmount = this.currentChat.users.length;
                 for (let i = 0; i < userAmount; ++i) {
@@ -35,12 +39,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
                         this.chatUsers += ', ';
                     }
                 }
-            }
-        );
 
-        this.currentChat.messageAdded.subscribe(
-            () => {
-                this.scrollToBottom();
+                this.newMessage = this.currentChat.messageAdded.subscribe(
+                    (data: string) => {
+                        this.scrollToBottom();
+                    }
+                );
             }
         );
   }
@@ -70,15 +74,13 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
 
     private onScroll() {
-        const element = this.scrollContainer.nativeElement;
+        /* const element = this.scrollContainer.nativeElement;
         const atBottom = (element.scrollHeight - element.scrollTop - element.clientHeight) < 2;
-        console.log(atBottom);
-        console.log(element.scrollHeight - element.scrollTop - element.clientHeight);
         if (atBottom) {
             this.disableScrollDown = false;
         } else {
             this.disableScrollDown = true;
-        }
+        } */
     }
 
     private scrollToBottom(): void {
@@ -89,7 +91,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
             try {
                 this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
             } catch (err) { console.log(err); }
-        }, 200);
+        }, 100);
+    }
+
+    ngOnDestroy() {
+        this.newMessage.unsubscribe();
     }
 
 }

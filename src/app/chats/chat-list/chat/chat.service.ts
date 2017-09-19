@@ -13,7 +13,6 @@ import * as io from 'socket.io-client';
 export class ChatService {
     private chats: Chat[] = [];
     private socket: any;
-    messageAdded = new Subject();
 
     constructor(private errorService: ErrorService, private router: Router, private http: Http) {
         this.socket = io();
@@ -27,10 +26,30 @@ export class ChatService {
                 this.chats.push(newChat);
             }
         );
+
     }
 
     getServiceChats() {
+        if (this.chats.length >= 2) {
+            this.sortChatsByTime();
+        }
         return this.chats;
+    }
+
+    sortChatsByTime() {
+        this.chats.sort(function(a: Chat, b: Chat) {
+            if (a.messages.length === 0 || b.messages.length === 0) {
+                return 0;
+            }
+            const dateA = new Date(a.messages[a.messages.length - 1 ].date);
+            const dateB = new Date(b.messages[b.messages.length - 1 ].date);
+            if (dateA > dateB) {
+                return -1;
+            } else if (dateA < dateB) {
+                return 1;
+            }
+            return 0;
+        });
     }
 
     getChats() {
@@ -149,26 +168,10 @@ export class ChatService {
 
         chat.messages.push(tempMessage);
         chat.addMessage(tempMessage);
-        chat.messageAdded.next();
+        chat.messageAdded.next('test');
         return this.http.post('/api/chats' + '/' + chat.chatId + '/content' + token, body, {headers: headers})
             .map(
-                (response: Response) => {
-                    // the model based on the mongoose schema
-                    // needs to be converted into Angular form of user
-
-                    /* const messageSchema = response.json().obj;
-                    const newMessage = new Message(
-                        messageSchema.contentText,
-                        new User(messageSchema.author.email,
-                            '',
-                            [], // currently message does not know about author's other chats
-                            messageSchema.author.firstName,
-                            messageSchema.author.lastName,
-                            ));
-                    chat.messages.push(newMessage); */
-
-                }
-            )
+                (response: Response) => {})
             .catch((error: Response) => {
                 this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
