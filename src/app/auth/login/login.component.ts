@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('email', data.email);
                     this.router.navigateByUrl('/chats');
                 },
-                error => console.error(error)
             );
         this.myForm.reset();
     }

@@ -1,3 +1,5 @@
+import { Error } from '../../errors/error.model';
+import { ErrorService } from '../../errors/errors.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { User } from '../user.model';
 import { AuthService } from '../auth.service';
@@ -12,7 +14,9 @@ import { Component, OnInit } from '@angular/core';
 export class SignupComponent implements OnInit {
     myForm: FormGroup;
 
-    constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private errorService: ErrorService,
+        private authService: AuthService, private route: ActivatedRoute,
+        private router: Router) {}
 
     onSubmit() {
         const user = new User(
@@ -24,9 +28,19 @@ export class SignupComponent implements OnInit {
             []
         );
         this.authService.signup(user)
-            .subscribe();
+            .subscribe(
+                (data) => {
+                    this.errorService.handleError(
+                        {
+                            title: 'Registration Successful',
+                            error: {
+                            message: ('Thank you for registering, ' + data.obj.name + '! Please login to continue')
+                            }
+                    });
+                }
+            );
         this.myForm.reset();
-        this.router.navigateByUrl('/signin');
+
     }
 
     ngOnInit() {

@@ -99,9 +99,12 @@ router.post('/friends', verifyToken, function (req, res, next) {
 
         // add ourselves to the users' friends list and add them to our friends list
         for (var i = 0; i < validUsers.length; i++) {
+
             // return res.send({users: validUsers, length: validUsers.length, id: validUsers[0]._id});
             User.update({ _id: req.decoded.user._id}, {$push: { friends: validUsers[i]}}, function(err, raw) {
-                
+                if(err) {
+                    
+                }
             });
             User.update({ _id: validUsers[i]._id }, {$push: { friends: req.decoded.user}}, function(err, raw) {
                 // console.log(raw);
@@ -167,7 +170,8 @@ router.post('/', function (req, res, next) {
         if (err) {
             return res.status(500).json({
                 title: 'Email is already taken',
-                error: { message: 'Please use a different email!' }
+                error: { message: 'Please use a different email!' },
+                err: err
             });
         }
         res.status(201).json({

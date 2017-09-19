@@ -1,3 +1,4 @@
+import { ErrorService } from '../errors/errors.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validator, Validators } from '@angular/forms';
 import { UserService } from './user.service';
@@ -15,7 +16,8 @@ export class UserComponent implements OnInit {
     currentUser: User;
     emails: FormArray;
 
-    constructor(private userService: UserService, private route: ActivatedRoute,
+    constructor(private errorService: ErrorService,
+        private userService: UserService, private route: ActivatedRoute,
         private router: Router) {
 /*         route.data.pluck('user').map(
             (value: User) => {
@@ -26,10 +28,40 @@ export class UserComponent implements OnInit {
 
     onSubmit() {
         const newFriends = [];
+        let failed = false;
         this.emails.controls.forEach(element => {
             newFriends.push(element.value);
         });
-        this.userService.addFriends(newFriends).subscribe();
+
+        this.currentUser.friends.forEach((friend) => {
+
+            newFriends.forEach((newFriend) => {
+                if (friend.email === newFriend.email) {
+                    this.errorService.handleError(
+                        {
+                            title: 'Cannot add friends!',
+                            error: {
+                            message: ('The email address: ' + newFriend.email + ' is already a friend! Please only add new friends!')
+                            }
+                    });
+                    failed = true;
+                }
+
+                if (newFriend.email === this.currentUser.email) {
+                    this.errorService.handleError(
+                        {
+                            title: 'Cannot add friends',
+                            error: {
+                            message: ('You cannot add yourself to your friend list :(')
+                            }
+                    });
+                    failed = true;
+                }
+            });
+        });
+        if (!failed) {
+            this.userService.addFriends(newFriends).subscribe();
+        }
     }
 
     createItem(): FormGroup {
