@@ -1,3 +1,35 @@
 :host {
     width: 100%;
 }
+
+.friend-list {
+    margin-left: -15px;
+    height: calc(100vh - 56px);
+    background-color: #232B2D;
+    min-height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+    overflow-y: scroll;
+}
+
+.chat-bubble {
+    background-color: #385169;
+    border-radius: 10px;
+    color: white;
+    border-color: #DBDADA   
+}
+
+a.custom-activated {
+    background-color: lightgray;
+    color: #232B2D;
+}
+
+a.custom-activated:hover {
+    background-color: lightgray;
+    color: #232B2D;
+}
+
+.chat-bubble:hover {
+    cursor: pointer;
+    background-color: lightgray;
+    color: #232B2D;
+}

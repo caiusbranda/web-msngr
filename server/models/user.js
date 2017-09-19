@@ -6,7 +6,8 @@ var schema = new Schema({
     name: {type: String, required: true},
     password: {type: String, required: true},
     email: {type: String, required: true, unique: true},
-    chats: [{type: Schema.Types.ObjectId, ref: 'Chat'}]
+    chats: [{type: Schema.Types.ObjectId, ref: 'Chat'}],
+    friends: [{type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
 schema.plugin(mongooseUniqueValidator);

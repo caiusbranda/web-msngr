@@ -7,7 +7,10 @@ router.use('/user', userRoute);
 router.use('/chats', chatsRoute);
 
 router.get('*', function (req, res) {
-    res.status(404).send('invalid api request');
+    res.status(500).json({
+        title: 'That api route does not exist yet',
+        error: { messages: "invalid api route" }
+    });
 });
 
 module.exports = router;

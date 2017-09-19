@@ -3,3 +3,28 @@
     background-color: #385169;
     border-color: #CFC7C7;
 }
+
+:host {
+    width:100%;
+    height:100%;
+}
+
+a.btn-primary.btn-custom.custom-activated {
+    background-color: lightgray;
+    color: #232B2D;
+}
+
+a.custom-activated:hover {
+    background-color: lightgray;
+    color: #232B2D;
+}
+
+p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+i.fa.fa-comment {
+    color: green;
+}

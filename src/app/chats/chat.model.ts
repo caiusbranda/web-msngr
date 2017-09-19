@@ -1,5 +1,7 @@
+import { EventEmitter } from '@angular/core';
+import { ObservableInput } from 'rxjs/Observable';
 import { ChatService } from './chat-list/chat/chat.service';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable, Observer, Subject } from 'rxjs/Rx';
 import { Message } from './message-list/message/message.model';
 import { User } from '../auth/user.model';
 import * as io from 'socket.io-client';
@@ -7,6 +9,8 @@ import * as io from 'socket.io-client';
 export class Chat {
     socket: any;
     messageAdded = new Subject();
+    currentlyTyping = '';
+    newMessage = false;
 
     constructor(
         public users: User[],
@@ -17,12 +21,28 @@ export class Chat {
 
             this.socket = io();
             this.socket.emit('join', this.chatId);
-            this.listen('new message').subscribe(msg => {
-                this.messages.push(msg);
-                this.messageAdded.next();
-            });
-
+            this.listen('new message').subscribe(
+                (msg) => {
+                    this.messages.push(msg);
+                    this.messageAdded.next('test');
+                    this.newMessage = true;
+                }
+            );
+            // listen to who is typing
+            this.listen('typing').subscribe(
+                (user) => {
+                    this.currentlyTyping = user;
+                }
+            );
         }
+
+    startedTyping() {
+        this.socket.emit('typing', this.chatId, localStorage.getItem('name'));
+    }
+
+    stoppedTyping() {
+        this.socket.emit('typing', this.chatId, '');
+    }
 
     addMessage(msg: Message) {
         this.socket.emit('new message', this.chatId, msg);

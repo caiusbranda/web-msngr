@@ -1,10 +1,22 @@
+<div class="my-2 mx-auto w-75">
+    <a routerLinkActive="active" routerLink="/chats/new" skipLocationChange="true" class="btn btn-success w-100">
+        <strong>New Chat <i class="fa fa-plus ml-2" aria-hidden="true"></i> </strong>
+    </a>
+</div>
+
+
 <div *ngFor="let chat of chats"
 class="card mt-2">
-    <a class="btn btn-primary btn-custom"
-        routerLink="/chats/{{chat.chatId}}">
+    <a class="btn btn-primary btn-custom" routerLinkActive="custom-activated"
+    skipLocationChange="true" routerLink="/chats/{{chat.chatId}}">
 <!--         <span *ngFor="let user of chat.users; let i = index">{{ i != 0 ? ', ' : '' }}{{ user.firstName }}</span>
  -->   
-        <strong>{{ chat.name }}</strong>
+        <strong>{{ chat.name }} <i *ngIf="chat.newMessage" class="fa fa-comment ml-1" aria-hidden="true"></i>
+        </strong>
+        <hr class="my-2">
+        <p class="text-muted">
+            {{ chat.messages.length > 0 ? (chat.messages[chat.messages.length-1].author.name + ': ' + chat.messages[chat.messages.length-1].contentText) : ''}}
+        </p>
      </a>
 </div>
 

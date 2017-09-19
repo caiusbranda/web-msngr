@@ -1,3 +1,6 @@
+import { ErrorService } from './errors/errors.service';
+import { UserResolver } from './user/user.resolver';
+import { UserService } from './user/user.service';
 import { ChatResolver } from './chats/chat-list/chat/chat.resolver';
 import { ChatService } from './chats/chat-list/chat/chat.service';
 import { AuthService } from './auth/auth.service';
@@ -21,6 +24,9 @@ import { ChatsComponent } from './chats/chats.component';
 import { NewChatComponent } from './chats/chat-list/chat/new-chat/new-chat.component';
 import { MessageInputComponent } from './chats/message-list/message/message-input/message-input.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UserComponent } from './user/user.component';
+import { FriendListComponent } from './user/friend-list/friend-list.component';
+import { ErrorsComponent } from './errors/errors.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +42,10 @@ import { HttpClientModule } from '@angular/common/http';
     ChatComponent,
     ChatsComponent,
     NewChatComponent,
-    MessageInputComponent
+    MessageInputComponent,
+    UserComponent,
+    FriendListComponent,
+    ErrorsComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +56,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NgbModule.forRoot()
   ],
-  providers: [AuthService, ChatService, ChatResolver],
+  providers: [AuthService, ChatService,
+    ChatResolver, UserService, UserResolver, ErrorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

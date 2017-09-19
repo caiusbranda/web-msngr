@@ -1,0 +1,30 @@
+
+<div class="row">
+    <div class="col-md-3 chat-list">
+        <app-friend-list [users]="this.currentUser.friends"></app-friend-list>
+    </div> 
+    <div class="col-md-9 dark-blue chat-window scroll-input">
+        <h2 class="text-white mt-2">Add friends by their email!</h2>
+        <form class="mt-4" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <div formArrayName="emails" class="col-md-8"
+                    *ngFor="let email of myForm.get('emails').controls; let i = index;">
+
+                    <div [formGroupName]="i">
+                        <input class="form-control" formControlName="email" type="text" placeholder="email">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h1 class="text-white">
+                        <span (click)="addInputs()">+</span>
+                        <span (click)="removeInputs()">-</span>
+                    </h1>
+                </div>
+            </div>
+            <button
+                    class="btn btn-success"
+                    type="submit"
+                    [disabled]="!myForm.valid">Add Friend(s)!</button>
+        </form>
+    </div>
+</div>

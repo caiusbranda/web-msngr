@@ -1,21 +1,4 @@
 
-.chat-list {
-    background-color: #232B2D;
-    min-height: calc(100vh - 56px);
-    max-height: calc(100vh - 56px);
-    overflow-y: scroll;
-}
-
-.chat-window {
-    height: calc(100vh - 56px);
-    /* background-color: #232B2D; */
-    bottom: 0;
-    width: 100%;
-    position: relative;
-    margin-bottom: 0;
-    padding: 0;
-}
-
 :host {
     height: 100%;
     width: 100%;

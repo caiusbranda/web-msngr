@@ -1,9 +1,11 @@
-<h2 class="text-light">
-    {{ this.currentChat.name }}
-</h2>
-<div class="container-chat msg-scroll" #chatScroll (scroll)="onScroll()">
+<div class="chat-header">
+    <h3 class="text-white p-0">{{ this.currentChat.name }} - 
+        <span class="text-muted smaller-text">{{ this.chatUsers }}</span></h3>
+    <p class="currently-typing text-white p-0">{{ this.getCurrentTyping() }}</p>
+</div>
+<div class="msg-scroll" #chatScroll>
     <app-message-list [messages]="this.currentChat.messages"></app-message-list>
 
 </div>
 
-<app-message-input [chat]="this.currentChat"></app-message-input>
+<app-message-input (keyup)="onKeyUp()" [chat]="this.currentChat"></app-message-input>

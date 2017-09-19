@@ -1,4 +1,54 @@
+<div class="row custom-row">
+    <div class="col-md-4 friend-list">
+        
+        <h3 (click)="submitChat()" class="text-white my-3 ">
+            Select friends to add!
+        </h3>
+        
+        
+        <div *ngFor="let user of this.currentUser.friends; let i=index;"
+        class="list-group mb-2 chat-bubble">
+            <a (click)="this.isClicked[i] = this.isClicked[i] === i ? -1 : i" 
+            [ngClass]="{'custom-activated': this.isClicked[i]==i}" 
+            class="btn chat-bubble" 
+            #friends 
+            name="{{ user.email }}"> 
+                {{ user.name }}
+            </a>
+        </div>
+        
+        
+    </div>
 
+    <div class="col-md-8 chat-window">
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="mt-3">
+                <div class="form-group">
+                        <div class="form-group">
+                                <label for="name">
+                                    <h3 class="text-white">Enter Chat Name</h3>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="name"
+                                        class="form-control"
+                                        formControlName="name">
+                            </div>
+
+                </div>
+                <button
+                        class="btn btn-success"
+                        type="submit"
+                        [disabled]="!myForm.valid">Create Chat</button>
+            </form>
+
+            <h4 *ngIf="formFail"
+            class="text-danger">
+            Please select at least one friend before attempting to create a chat!
+            </h4>
+    </div>
+</div>
+
+<!-- 
 <div class="custom-row row my-3">
     <div class="col-md-4 mx-auto">
         <h3>Create a new chat!</h3>
@@ -32,3 +82,4 @@
     </div>
 </div>
 
+ -->

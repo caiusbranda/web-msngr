@@ -9,7 +9,7 @@
     <div class="col-md-4 mx-auto">
         <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name">Name*</label>
                 <input
                         type="text"
                         id="name"
@@ -17,20 +17,26 @@
                         formControlName="name">
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">Email*</label>
                 <input
                         type="email"
                         id="email"
                         class="form-control"
                         formControlName="email">
+                <small id="emailHelp" class="form-text text-muted">
+                        Must be a valid address of the form ____@___.__
+                </small>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Password*</label>
                 <input
                         type="password"
                         id="password"
                         class="form-control"
                         formControlName="password">
+                <small id="emailHelp" class="form-text text-muted">
+                        * Required
+                </small>
             </div>
             <button
                     class="btn btn-primary"
