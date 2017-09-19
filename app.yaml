@@ -1,0 +1,16 @@
+env: flex
+runtime: nodejs
+health_check:
+  enable_health_check: False
+  check_interval_sec: 5
+  timeout_sec: 4
+  unhealthy_threshold: 2
+  healthy_threshold: 2
+env_variables:
+  mongodb: 'mongodb://ds129144.mlab.com:29144/web-msngr'
+  username: 'admin'
+  password: 'adminpass'
+  secret: 'secret'
+handlers:
+- url: .*
+  script: app.js
