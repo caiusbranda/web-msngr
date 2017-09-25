@@ -14,13 +14,15 @@ socketEvents = require('./server/socketEvents');
 
 const app = express();
 
+const mongoConnString = process.env.mongodb;
+
 var options = {
     useMongoClient: true,
     user: process.env.username,
     pass: process.env.password
   };
 
-mongoose.connect('mongodb://ds129144.mlab.com:29144/web-msngr', options, function(err){
+mongoose.connect(mongoConnString, options, function(err){
     if (err) {
         console.log(err);
     }
