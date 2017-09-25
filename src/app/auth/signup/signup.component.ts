@@ -34,11 +34,23 @@ export class SignupComponent implements OnInit {
                         {
                             title: 'Registration Successful',
                             error: {
-                            message: ('Thank you for registering, ' + data.obj.name + '! Please login to continue')
+                            message: ('Thank you for registering, ' + data.obj.name + '!')
                             }
                     });
+
+                    this.authService.signin(user)
+                    .subscribe(
+                        data => {
+                            localStorage.setItem('token', data.token);
+                            localStorage.setItem('userId', data.userId);
+                            localStorage.setItem('name', data.name);
+                            localStorage.setItem('email', data.email);
+                            this.router.navigateByUrl('/chats');
+                        },
+                    );
                 }
             );
+
         this.myForm.reset();
 
     }
