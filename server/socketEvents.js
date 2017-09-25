@@ -1,15 +1,6 @@
 exports = module.exports = function(io) {  
     // Set socket.io listeners.
     io.on('connection', (socket) => {
-        // console.log('connection established');
-        // subscribe to all chats in list
-        /* socket.on('get chats', (chats) => {
-            console.log('socket: ' + socket._id);
-            chats.forEach(function(chat) {
-                socket.join(chat._id);
-                //console.log('joined ' + chat._id);
-            }); 
-        });*/
         
         // On chat creation, join broadcast for the chat
         socket.on('join', (chat) => {

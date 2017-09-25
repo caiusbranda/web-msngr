@@ -8,6 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+    showDropdown = false;
+
+    toggleDropdown() {
+        this.showDropdown = !this.showDropdown;
+    }
+
+    disableDropdown() {
+        this.showDropdown = false;
+    }
+
   constructor(private authService: AuthService) { }
 
   ngOnInit() {

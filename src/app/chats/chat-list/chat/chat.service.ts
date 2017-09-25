@@ -38,8 +38,14 @@ export class ChatService {
 
     sortChatsByTime() {
         this.chats.sort(function(a: Chat, b: Chat) {
-            if (a.messages.length === 0 || b.messages.length === 0) {
+            if (a.messages.length === 0 && b.messages.length === 0) {
                 return 0;
+            }
+            if (a.messages.length === 0) {
+                return 1;
+            }
+            if (b.messages.length === 0) {
+                return -1;
             }
             const dateA = new Date(a.messages[a.messages.length - 1 ].date);
             const dateB = new Date(b.messages[b.messages.length - 1 ].date);
@@ -62,10 +68,6 @@ export class ChatService {
             .map((response: Response) => {
                 const newChats = response.json().chats;
                 const transformedChats: Chat[] = [];
-
-                // console.log(this.socket);
-
-                // this.socket.emit('get chats', newChats);
 
                 for (const chat of newChats) {
                     const newChat = new Chat(chat.users, chat.messages, chat.name, chat._id);
@@ -177,13 +179,6 @@ export class ChatService {
                 return Observable.throw(error.json());
             })
             .subscribe();
-           /*  .map((response: Response) => {
-                const result = response.json();
-                const newChat = new Chat(result.obj.users, [], result.obj._id);
-                this.chats.push(newChat);
-                return newChat;
-            })
-            .catch((error: Response) => Observable.throw(error.json())); */
     }
 
     listen(event: string): Observable<any> {
