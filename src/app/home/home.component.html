@@ -10,13 +10,19 @@
 
 </div> -->
 <div class="container">
-    <div class="jumbotron mt-4">
-            <h1 class="display-3">Welcome to webmsngr!</h1>
-            <p class="lead">Create an account or login</p>
-            <hr class="my-4">
-            <p class="lead">
-                <a routerLink="/login" class="btn btn-primary w-25 mt-3">Login</a>
-                <a routerLink="/signup" class="btn btn-primary w-25 mt-3">Signup</a>
-            </p>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="jumbotron mt-4">
+                    <h1 class="display-3">Welcome to webmsngr!</h1>
+                    <p class="lead">Create an account or login</p>
+                    <hr class="my-4">
+                    <p class="lead">
+                        Please visit the <a href="https://github.com/caiusbranda/web-msngr"> repository for more information!</a>  
+                    </p>
+                    <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn btn-primary w-25 mt-3">Login</a>
+                    <a *ngIf="!isLoggedIn()" routerLink="/signup" class="btn btn-primary w-25 mt-3">Signup</a>
+                    <a *ngIf="isLoggedIn()" routerLink="/logout" class="btn btn-primary w-25 mt-3">Logout</a>
+            </div>
+        </div>
     </div>
 </div>
