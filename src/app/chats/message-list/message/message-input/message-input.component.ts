@@ -3,7 +3,7 @@ import { Message } from '../message.model';
 import { ChatService } from '../../../chat-list/chat/chat.service';
 import { Chat } from '../../../chat.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-message-input',
@@ -13,12 +13,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MessageInputComponent implements OnInit {
     myForm: FormGroup;
     @Input() chat: Chat;
+    @ViewChild('msgInput') msgInput: ElementRef;
 
         constructor(private chatService: ChatService) {}
 
         onSubmit() {
             this.chatService.addMessage(this.chat, this.myForm.value.message);
             this.myForm.reset();
+            this.msgInput.nativeElement.focus();
         }
 
         ngOnInit() {

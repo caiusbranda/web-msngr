@@ -1,6 +1,8 @@
 <form class="form-inline" [formGroup]="myForm" (ngSubmit)="onSubmit()">
-    <div class="form-group col-md-10">
-        <input
+    <div class="form-group col-md-10" >
+        <input  
+                autocomplete="off"
+                #msgInput
                 type="text"
                 placeholder="enter msg"
                 id="message"

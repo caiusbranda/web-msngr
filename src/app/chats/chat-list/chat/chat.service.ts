@@ -77,7 +77,7 @@ export class ChatService {
                 return this.chats;
             })
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
+                // this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
             });
     }
@@ -124,7 +124,7 @@ export class ChatService {
                 return newChat;
             })
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
+               // this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
             });
     }
@@ -138,7 +138,7 @@ export class ChatService {
         return this.http.delete('/api/message/' + chat.chatId + token)
             .map((response: Response) => response.json())
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
+                // this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
             });
     }
@@ -175,7 +175,7 @@ export class ChatService {
             .map(
                 (response: Response) => {})
             .catch((error: Response) => {
-                this.errorService.handleError(error.json());
+                // this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
             })
             .subscribe();

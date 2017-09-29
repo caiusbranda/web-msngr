@@ -31,7 +31,6 @@ export class AuthService {
         return this.http.post('/api/user/signin', body, {headers: headers})
             .map((response: Response) => response.json())
             .catch((error: Response) => {
-                console.log(error.json);
                 this.errorService.handleError(error.json());
                 return Observable.throw(error.json());
             });

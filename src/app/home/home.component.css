@@ -1,3 +1,13 @@
 h1 {
     overflow-wrap: break-word;
 }
+
+.custom-button {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.home-img {
+    margin-bottom: 15px;
+}

@@ -109,7 +109,12 @@ router.post('/:id/content', function (req, res, next) {
                 });
             }
             Chats.update({ _id: chat._id }, {$push: { messages: message }}, function(err, raw) {
-                //console.log(raw);
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error occurred',
+                        error: err
+                    });
+                }
             });
 
             Message.populate(message, {path: 'author'}, function(err, message){
